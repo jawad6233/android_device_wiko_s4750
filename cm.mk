@@ -4,6 +4,10 @@ PRODUCT_RELEASE_NAME := Highway Signs
 # Inherit some common CM stuff.
 $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
+# Inherit from the common Open Source product configuration
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+
+
 # Inherit device configuration
 $(call inherit-product, device/wiko/s4750/device_s4750.mk)
 
