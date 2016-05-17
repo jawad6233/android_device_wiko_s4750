@@ -94,3 +94,7 @@ Services requires root:
 	hyperion70
 	superdragonpt
 	and many more ...
+
+# Using Github
+
+Need help at using Github? Have a look at his awesome guide: https://rogerdudler.github.io/git-guide/
