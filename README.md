@@ -105,9 +105,10 @@ Services requires root:
 	Ferhung
 	xen0n
 	Fire855
-	derteufel1960
+	DerTeufel1960
 	rohan taneja
 	hyperion70
+	superdragonpt
 	and many more ...
 
 
