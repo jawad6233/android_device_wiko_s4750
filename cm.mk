@@ -7,7 +7,7 @@ PRODUCT_RELEASE_NAME := Highway Signs
 $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
 # Inherit device configuration
-$(call inherit-product, device/kingzone/wiko/s4750.mk)
+$(call inherit-product, device/wiko/s4750/device_s4750.mk)
 
 ## Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := s4750
