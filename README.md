@@ -1,4 +1,26 @@
-----Thanks for xen0n, who are contributing to the working CyanogenMod of MTK hardware.---
+==============
+
+Wiko Highway Signs (codenamed _"s4750"_) is a smartphone from Wiko.
+
+The Wiko Highway Signs (s4750) uses a Mediatek Chipset (MT6592m).
+
+Basic   | Spec Sheet
+-------:|:-------------------------
+CPU     | 1.4GHz Quad-Core MT6592m
+GPU     | Mali-450MP
+Memory  | 1GB RAM
+Shipped Android Version | 4.4.2
+Updated to Android Version | 4.4.2
+Storage | 8GB
+Battery | 2000 mAh
+Display | 5" 720 x 1280 px
+Density | 320 pixel per inch (PPI)
+Camera  | 8MP Back, 5MP Front, LED Flash
+Kernel Version  | Kitkat:3.4.67
+
+![s4750](http://ce.lnwfile.com/0dvpqu.jpg "Wiko Highway Signs")
+
+
 # CyanogenMod 13.0
 
 This is a device tree for Wiko Highway Signs (s4750) which is based on Mediatek MT6592m SoC.
@@ -85,7 +107,11 @@ Services requires root:
 
   * mediaserver depends on /data/nvram folder access, unable to do voice calls from 'media' user (default user 'media')
 
-# Thanks:
+# Using Github
+
+Need help at using Github? Have a look at his awesome guide: https://rogerdudler.github.io/git-guide/
+
+# Thanks
 	Ferhung
 	xen0n
 	Fire855
@@ -93,8 +119,9 @@ Services requires root:
 	rohan taneja
 	hyperion70
 	superdragonpt
+	Al3XKOoL
+	ariafan
+	axet
+	chrmhoffmann
+	Santhosh M
 	and many more ...
-
-# Using Github
-
-Need help at using Github? Have a look at his awesome guide: https://rogerdudler.github.io/git-guide/
