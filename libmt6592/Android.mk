@@ -16,7 +16,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
-    mt6592_ril.cpp
+    mt6582_ril.cpp
 
 LOCAL_SHARED_LIBRARIES := libbinder
 LOCAL_MODULE := libmt6592

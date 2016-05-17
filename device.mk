@@ -1,4 +1,18 @@
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+#
+# Copyright (C) 2016 The CyanogenMod Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 
 # The gps config appropriate for this device
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
@@ -7,9 +21,7 @@ $(call inherit-product, device/common/gps/gps_us_supl.mk)
 # PRODUCT_DEX_PREOPT_DEFAULT_FLAGS := --compiler-filter=interpret-only
 # $(call add-product-dex-preopt-module-config,services,--compiler-filter=space)
 
-$(call inherit-product-if-exists, vendor/wiko/s4750/s4750-vendor.mk)
-
-LOCAL_PATH := device/wiko/s4750
+LOCAL_PATH := device/mediatek/mt6582
 
 PRODUCT_CHARACTERISTICS := default
 
@@ -29,7 +41,7 @@ PRODUCT_PACKAGES += \
     libxlog
 
 PRODUCT_PACKAGES += \
-    lights.mt6592
+    lights.mt6582
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -40,7 +52,7 @@ PRODUCT_PACKAGES += \
     tinymix
 
 PRODUCT_PACKAGES += \
-    audio.primary.mt6592
+    audio.primary.mt6582
 
 PRODUCT_PACKAGES += \
     audio_policy.default
@@ -61,34 +73,34 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/mtk-kpd.kl:system/usr/keylayout/mtk-kpd.kl
 
-# FM Radio		
-#	PRODUCT_PACKAGES += \		
-#	    FMRadio \		
-#	    libfmjni \		
-#	    libfmmt6620 \		
-#	    libfmmt6628 \		
-#	    libfmmt6627 \		
-#	    libfmmt6630 \		
-#	    libfmcust \		
-#	    libmtkplayer
+# FM Radio
+PRODUCT_PACKAGES += \
+    FMRadio \
+    libfmjni \
+    libfmmt6620 \
+    libfmmt6628 \
+    libfmmt6627 \
+    libfmmt6630 \
+    libfmcust \
+    libmtkplayer
 
 # GSM
 #PRODUCT_PACKAGES += \
 #    gsm0710muxd
-PRODUCT_PACKAGES += libmt6592
+PRODUCT_PACKAGES += libmt6582
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.ril_class=MediaTekRIL
 
 # Rootdir
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/fstab.mt6592:root/fstab.mt6592 \
-    $(LOCAL_PATH)/rootdir/init.recovery.mt6592.rc:root/init.recovery.mt6592.rc \
-    $(LOCAL_PATH)/rootdir/init.mt6592.rc:root/init.mt6592.rc \
+    $(LOCAL_PATH)/rootdir/fstab.mt6582:root/fstab.mt6582 \
+    $(LOCAL_PATH)/rootdir/init.recovery.mt6582.rc:recovery/root/init.recovery.mt6582.rc \
+    $(LOCAL_PATH)/rootdir/init.mt6582.rc:root/init.mt6582.rc \
     $(LOCAL_PATH)/rootdir/init.storage.rc:root/init.storage.rc \
     $(LOCAL_PATH)/rootdir/init.modem.rc:root/init.modem.rc \
-    $(LOCAL_PATH)/rootdir/ueventd.mt6592.rc:root/ueventd.mt6592.rc \
-    $(LOCAL_PATH)/rootdir/init.mt6592.usb.rc:root/init.mt6592.usb.rc \
+    $(LOCAL_PATH)/rootdir/ueventd.mt6582.rc:root/ueventd.mt6582.rc \
+    $(LOCAL_PATH)/rootdir/init.mt6582.usb.rc:root/init.mt6582.usb.rc \
     $(LOCAL_PATH)/rootdir/enableswap.sh:root/enableswap.sh \
     $(LOCAL_PATH)/rootdir/factory_init.rc:root/factory_init.rc \
     $(LOCAL_PATH)/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab \
@@ -152,7 +164,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PROPERTY_OVERRIDES := \
 	ro.mediatek.version.release=ALPS.W10.24.p0 \
-	ro.mediatek.platform=MT6592 \
+	ro.mediatek.platform=MT6582 \
 	ro.mediatek.chip_ver=S01 \
 	ro.mediatek.version.branch=KK1.MP1 \
 	ro.mediatek.version.sdk=2 \
@@ -164,8 +176,8 @@ PRODUCT_PROPERTY_OVERRIDES := \
 	persist.service.debuggable=1 \
 	persist.mtk.wcn.combo.chipid=-1
 
-PRODUCT_NAME := full_s4750
-PRODUCT_DEVICE := s4750
+PRODUCT_NAME := full_mt6582
+PRODUCT_DEVICE := mt6582
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1280

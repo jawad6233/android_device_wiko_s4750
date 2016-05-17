@@ -8,14 +8,7 @@ on early-init
 
 on init
     export LD_PRELOAD "/system/lib/libxlog.so /system/lib/libmt6592.so"
-        
-    # Support legacy paths
-    symlink /sdcard /mnt/sdcard
-    symlink /sdcard /storage/sdcard0
-
-    # if primary storage is physical, set ro.vold.primary_physical to 1
-    setprop ro.vold.primary_physical 1
-
+    
     mkdir /protect_f 0771 system system
     mkdir /protect_s 0771 system system
 
@@ -150,7 +143,6 @@ on post-fs-data
 
     # create for muxd pts device node , to operate without root
     mkdir /dev/radio 0770 radio radio
-
     start adbd
 
 # GPS
@@ -347,6 +339,7 @@ on post-fs-data
     chown system /sys/devices/platform/msensor/driver/cpsreptxy
     chown system /sys/devices/platform/msensor/driver/cpsreptz
 
+
     # SPM SODI Enable
     chown media /proc/mcdi/sodi_en
     chmod 0664 /proc/mcdi/sodi_en
@@ -392,10 +385,10 @@ on post-fs-data
     # device info /proc interface
     chmod 0440 /dev/devmap
     chown root system /dev/devmap
-    
-    # FM Radio device node		
-    exec /system/xbin/mknod /dev/fm c 193 0		
-    chmod 0777 /dev/fm		
+
+    # FM Radio device node
+    exec /system/xbin/mknod /dev/fm c 193 0
+    chmod 0777 /dev/fm
     chown system media /dev/fm
 
     # BT relayer mode used VCOM
@@ -421,23 +414,18 @@ on post-fs-data
     # DISP
     chmod 0440 /dev/mtk_disp
 
-    #Camera
+    # Camera
     chmod 0660 /dev/camera-sysram
-    chmod 0660 /dev/camera-isp
+    chmod 0664 /dev/camera-isp
     chmod 0660 /dev/camera-pipemgr
     chmod 0660 /dev/kd_camera_hw
     chmod 0660 /dev/kd_camera_flashlight
     chmod 0660 /dev/kd_camera_hw_bus2
-    chmod 0660 /dev/FM50AF    
+    chmod 0660 /dev/FM50AF
     chmod 0660 /dev/DW9714AF
-    chmod 0660 /dev/DW9718AF    
-    chmod 0660 /dev/GAF001AF
-    chmod 0660 /dev/GAF002AF
-    chmod 0660 /dev/GAF008AF
+    chmod 0660 /dev/DW9718AF
     chmod 0660 /dev/OV8825AF
-    chmod 0660 /dev/AD5823AF
     chmod 0660 /dev/CAM_CAL_DRV
-    chmod 0660 /dev/EEPROM_M24C08F
 
     chown system camera /dev/camera-sysram
     chown system camera /dev/camera-isp
@@ -445,16 +433,11 @@ on post-fs-data
     chown system camera /dev/kd_camera_hw
     chown system camera /dev/kd_camera_flashlight
     chown system camera /dev/kd_camera_hw_bus2
-    chown system camera /dev/FM50AF    
+    chown system camera /dev/FM50AF
     chown system camera /dev/DW9714AF
-    chown system camera /dev/DW9718AF    
-    chown system camera /dev/GAF001AF
-    chown system camera /dev/GAF002AF
-    chown system camera /dev/GAF008AF
-    chown system camera /dev/OV8825AF		
-    chown system camera /dev/AD5823AF
+    chown system camera /dev/DW9718AF
+    chown system camera /dev/OV8825AF
     chown system camera /dev/CAM_CAL_DRV
-    chown system camera /dev/EEPROM_M24C08F
 
     #MATV
     chmod 0660 /dev/MATV
@@ -509,7 +492,6 @@ on post-fs-data
     chown gps gps /sys/devices/virtual/gpsdrv/gps/state
     chown gps gps /sys/devices/virtual/gpsdrv/gps/pwrsave
     chown gps gps /sys/devices/virtual/gpsdrv/gps/status
-
 
 #
 # Connectivity related device nodes & configuration (end)
@@ -709,6 +691,7 @@ service audio-daemon /system/bin/audiocmdservice_atci
     disabled
     oneshot
 
+
 service insmod insmod
     disabled
     oneshot
@@ -755,6 +738,7 @@ service wpa_supplicant /system/bin/wpa_supplicant -dd \
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
     oneshot
+
 
 service dhcpcd_bt-pan /system/bin/dhcpcd -A -BK -dd
     class main
@@ -959,4 +943,4 @@ service conn_launcher /system/bin/logwrapper /system/bin/6620_launcher -p /syste
 	
 service enableswap /system/bin/sh /enableswap.sh
     class core
-    oneshot
+    oneshot	

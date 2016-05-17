@@ -1,5 +1,5 @@
 #
-# system.prop for s4750
+# system.prop for wiko highway signs s4750
 #
 service.adb.root=1
 ro.sf.lcd_density=320
@@ -33,6 +33,9 @@ ril.active.md=0
 
 ro.telephony.ril_class=MediaTekRIL
 ro.telephony.ril.config=fakeiccid
+
+ro.nfc.port=I2C
+mtknfc.status.type=unknow
 
 # MTK, mtk03034, 20101210 {
 ro.mediatek.wlan.wsc=1
