@@ -35,3 +35,7 @@ Services requires root:
   * surfaceflinger depends on sched_setscheduler calls, unable to change process priority from 'system' user (default user 'system')
 
   * mediaserver depends on /data/nvram folder access, unable to do voice calls from 'media' user (default user 'media')
+
+# Using Github
+
+Need help at using Github? Have a look at his awesome guide: https://rogerdudler.github.io/git-guide/
