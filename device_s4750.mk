@@ -4,11 +4,11 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 # The gps config appropriate for this device
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
-$(call inherit-product-if-exists, vendor/kingzone/k1_turbo/k1_turbo-vendor.mk)
+$(call inherit-product-if-exists, vendor/wiko/s4750/s4750-vendor.mk)
 
-DEVICE_PACKAGE_OVERLAYS += device/kingzone/k1_turbo/overlay
+DEVICE_PACKAGE_OVERLAYS += device/wiko/s4750/overlay
 
-LOCAL_PATH := device/kingzone/k1_turbo
+LOCAL_PATH := device/wiko/s4750
 ifeq ($(TARGET_PREBUILT_KERNEL),)
 	LOCAL_KERNEL := $(LOCAL_PATH)/kernel
 else
@@ -61,7 +61,6 @@ PRODUCT_COPY_FILES += \
 # Keylayout
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/mtk-kpd.kl:system/usr/keylayout/mtk-kpd.kl \
-    $(LOCAL_PATH)/configs/mtk-tpd.kl:system/usr/keylayout/mtk-tpd.kl
 
 # Thermal
 PRODUCT_COPY_FILES += \
@@ -133,10 +132,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 $(call inherit-product, build/target/product/full.mk)
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
-PRODUCT_NAME := full_k1_turbo
-PRODUCT_DEVICE := k1_turbo
+PRODUCT_NAME := full_s4750
+PRODUCT_DEVICE := s4750
 
-TARGET_SCREEN_HEIGHT := 1920
-TARGET_SCREEN_WIDTH := 1080
+TARGET_SCREEN_HEIGHT := 1280
+TARGET_SCREEN_WIDTH := 720
 
-$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
+$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
