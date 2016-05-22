@@ -1,37 +1,76 @@
-# platform specific configuration items
-import /init.mt6592.usb.rc
-import /init.modem.rc
+import init.mt6592.usb.rc
+import init.modem.rc
+
+on charger
+    mount ext4 /emmc@android /system ro wait
+    start drvbd
+    start ipod
+    start servicemanager
+
+    # disable USB
+    write /sys/devices/platform/mt_usb/cmode 0
 
 on early-init
     mount debugfs /sys/kernel/debug /sys/kernel/debug
     setprop ro.mtk.hardware mt6592
 
 on init
-    export LD_PRELOAD "/system/lib/libxlog.so /system/lib/libmt6592.so"
-        
-    # Support legacy paths
-    symlink /sdcard /mnt/sdcard
-    symlink /sdcard /storage/sdcard0
 
-    # if primary storage is physical, set ro.vold.primary_physical to 1
+    export LD_PRELOAD "/system/lib/libxlog.so /system/lib/libmt6592.so"
+
     setprop ro.vold.primary_physical 1
 
     mkdir /protect_f 0771 system system
     mkdir /protect_s 0771 system system
 
-    # Change ION driver permission
+	# Change ION driver permission
     chmod 0666 /dev/ion
 
-    # change lk_env permission
+	# change lk_env permission
     chown root system /proc/lk_env
     chmod 0660 /proc/lk_env
 
-# mount different fs start
+    # GPS
+    chown gps gps /sys/class/gpsdrv/gps/pwrctl
+    chown gps gps /sys/class/gpsdrv/gps/suspend
+    chown gps gps /sys/class/gpsdrv/gps/state
+    chown gps gps /sys/class/gpsdrv/gps/pwrsave
+    chown gps gps /sys/class/gpsdrv/gps/status
+
+	# mount different fs start
 
 on fs
     write /proc/bootprof "INIT:eMMC:Mount_All_START"
     mount_all /fstab.mt6592
     write /proc/bootprof "INIT:eMMC:Mount_All_END"
+
+service agpsd /system/bin/mtk_agpsd
+    class main
+    socket agpsd stream 660 gps system
+    socket agpsd2 stream 660 gps system
+    socket agpsd3 stream 660 gps system
+    user root
+    group gps ccci inet sdcard_r sdcard_rw misc
+    oneshot
+
+service mnld /system/xbin/mnld
+    class main
+    user root
+    group system gps inet misc sdcard_rw sdcard_r media_rw
+    socket mnld stream 660 gps system
+    oneshot
+
+service wifi2agps /system/bin/wifi2agps
+    class main
+    user root
+    group gps inet
+    oneshot
+
+service BGW /system/xbin/BGW
+    user root
+    group gps system radio
+    class main
+    oneshot
 
 # mount different fs end
 
@@ -46,8 +85,14 @@ on post-fs
 
     exec /system/bin/mknod /dev/stpwmt c 190 0
     exec /system/bin/mknod /dev/stpgps c 191 0
-    
     exec /system/bin/mknod /dev/stpbt  c 192 0
+
+    # GPS
+    chmod 0666 /dev/gps
+    chown system gps /dev/gps
+    chmod 0660 /dev/stpgps
+    chown gps gps /dev/stpgps
+
     chmod 0660 /dev/stpbt
     chown bluetooth radio /dev/stpbt
 
@@ -153,9 +198,11 @@ on post-fs-data
 
     start adbd
 
-# GPS
+    # GPS
+    mkdir /data/agps_supl 0771 gps system
     mkdir /data/gps_mnl 0771 gps system
-    mkdir /data/misc/gps 0770 gps system
+
+    mkdir /data/misc/gps 0770 gps gps
 # -----------------------
 # Add by MTK
 
@@ -392,11 +439,6 @@ on post-fs-data
     # device info /proc interface
     chmod 0440 /dev/devmap
     chown root system /dev/devmap
-    
-    # FM Radio device node		
-    exec /system/xbin/mknod /dev/fm c 193 0		
-    chmod 0777 /dev/fm		
-    chown system media /dev/fm
 
     # BT relayer mode used VCOM
     chown bluetooth radio /dev/ttyGS2
@@ -428,16 +470,13 @@ on post-fs-data
     chmod 0660 /dev/kd_camera_hw
     chmod 0660 /dev/kd_camera_flashlight
     chmod 0660 /dev/kd_camera_hw_bus2
-    chmod 0660 /dev/FM50AF    
-    chmod 0660 /dev/DW9714AF
-    chmod 0660 /dev/DW9718AF    
-    chmod 0660 /dev/GAF001AF
-    chmod 0660 /dev/GAF002AF
-    chmod 0660 /dev/GAF008AF
+    chmod 0660 /dev/FM50AF
+    chmod 0660 /dev/DW9718AF
     chmod 0660 /dev/OV8825AF
     chmod 0660 /dev/AD5823AF
+    chmod 0660 /dev/DW9714AF
+    chmod 0660 /dev/BU6424AF
     chmod 0660 /dev/CAM_CAL_DRV
-    chmod 0660 /dev/EEPROM_M24C08F
 
     chown system camera /dev/camera-sysram
     chown system camera /dev/camera-isp
@@ -445,16 +484,13 @@ on post-fs-data
     chown system camera /dev/kd_camera_hw
     chown system camera /dev/kd_camera_flashlight
     chown system camera /dev/kd_camera_hw_bus2
-    chown system camera /dev/FM50AF    
-    chown system camera /dev/DW9714AF
-    chown system camera /dev/DW9718AF    
-    chown system camera /dev/GAF001AF
-    chown system camera /dev/GAF002AF
-    chown system camera /dev/GAF008AF
-    chown system camera /dev/OV8825AF		
+    chown system camera /dev/FM50AF
+    chown system camera /dev/DW9718AF
+    chown system camera /dev/OV8825AF
     chown system camera /dev/AD5823AF
+    chown system camera /dev/DW9714AF
+    chown system camera /dev/BU6424AF
     chown system camera /dev/CAM_CAL_DRV
-    chown system camera /dev/EEPROM_M24C08F
 
     #MATV
     chmod 0660 /dev/MATV
@@ -503,23 +539,11 @@ on post-fs-data
     chmod 0660 /dev/ttyMT2
     chown system system /dev/ttyMT2
 
-# GPS
-    chown gps gps /sys/devices/virtual/gpsdrv/gps/pwrctl
-    chown gps gps /sys/devices/virtual/gpsdrv/gps/suspend
-    chown gps gps /sys/devices/virtual/gpsdrv/gps/state
-    chown gps gps /sys/devices/virtual/gpsdrv/gps/pwrsave
-    chown gps gps /sys/devices/virtual/gpsdrv/gps/status
-
 
 #
 # Connectivity related device nodes & configuration (end)
 #
 
-# AGPS
-    mkdir /data/agps_supl 0771 gps system
-
-# GPS
-    mkdir /data/gps_mnl 0771 gps system
 
 # Encrypt phone function
     setprop vold.post_fs_data_done 1
@@ -569,11 +593,13 @@ on boot
     chown radio system /sys/power/tuxonice
     chown radio system /sys/power/tuxonice/do_hibernate
     chmod 0770 /sys/power/tuxonice
-    chmod 0220 /sys/power/tuxonice/do_hibernate
-
-# AGPS
-    mkdir /data/agps_supl 0771 gps system
-
+    chmod 0220 /sys/power/tuxonice/do_hibernate	
+	
+    # FM Radio device node
+    exec /system/bin/mknod /dev/fm c 193 0
+    chmod 0777 /dev/fm
+    chown system media /dev/fm
+	
 ## Thermal
   #change permissions on thermal devices
   chown root system /proc/mtktscpu/mtktscpu
@@ -810,20 +836,6 @@ service bluetoothd /system/bin/bluetoothd -n
 #
 #  External Modme control related services
 #
-
-service agpsd /system/bin/mtk_agpsd
-    class main
-    socket agpsd stream 660 gps system
-    socket agpsd2 stream 660 gps inet
-    socket agpsd3 stream 660 gps inet
-    user gps
-    group gps inet sdcard_r sdcard_rw misc radio
-
-service mnld /system/xbin/mnld
-    class main
-    user gps
-    group system gps inet misc sdcard_rw sdcard_r media_rw
-    socket mnld stream 660 gps system
     
 service mdlogger /system/bin/mdlogger
     class main

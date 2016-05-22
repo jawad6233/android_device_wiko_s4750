@@ -3,7 +3,7 @@
 
 LOCAL_PATH := device/wiko/s4750
 
-# Board
+# board
 TARGET_BOARD_PLATFORM := mt6592
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
@@ -23,39 +23,35 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 WITH_DEXPREOPT := false
 DONT_DEXPREOPT_PREBUILTS := true
 
-# GPS
-TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
-
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := mt6592
 
 # Assert
-# TARGET_OTA_ASSERT_DEVICE := s4750
+TARGET_OTA_ASSERT_DEVICE := wiko,s4750,tinno92_wet_kk
 
-# MTK HARDWARE
+# MTK Hardware
 BOARD_HAS_MTK_HARDWARE := true
 MTK_HARDWARE := true
 BOARD_USES_LEGACY_MTK_AV_BLOB := true
 COMMON_GLOBAL_CFLAGS += -DMTK_HARDWARE -DADD_LEGACY_ACQUIRE_BUFFER_SYMBOL
 COMMON_GLOBAL_CPPFLAGS += -DMTK_HARDWARE
-BLOCK_BASED_OTA :=false
+BLOCK_BASED_OTA := false
 
 # RIL
-BOARD_RIL_CLASS := ../../../device/wiko/s4750/ril/
+BOARD_RIL_CLASS := ../../../$(LOCAL_PATH)/ril/
 
 BOARD_CONNECTIVITY_VENDOR := MediaTek
 BOARD_CONNECTIVITY_MODULE := conn_soc
 
-# Partitions & Image
-TARGET_USERIMAGES_USE_EXT4 := true
-TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
+# make_ext4fs requires numbers in dec format
 BOARD_BOOTIMAGE_PARTITION_SIZE := 10485760
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 10485760
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2147483648
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 5430575104
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 2630877184
 BOARD_CACHEIMAGE_PARTITION_SIZE := 134217728
-BOARD_CACHEIMAGE_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 131072
+TARGET_USERIMAGES_USE_EXT4 := true
+BOARD_CACHEIMAGE_TYPE := ext4
 
 # Flags
 TARGET_GLOBAL_CFLAGS   += -mfpu=neon -mfloat-abi=softfp
@@ -74,6 +70,9 @@ TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/kernel
 BOARD_CUSTOM_BOOTIMG_MK := $(LOCAL_PATH)/MTKbootimg.mk
 BOARD_CUSTOM_BOOTIMG := true
 
+# Fonts
+EXTENDED_FONT_FOOTPRINT := true
+
 # recovery TWRP
 BOARD_HAS_NO_SELECT_BUTTON := true
 # TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/rootdir/twrp.fstab
@@ -82,12 +81,11 @@ TARGET_PREBUILT_RECOVERY_KERNEL := $(LOCAL_PATH)/kernel
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/mt_usb/musb-hdrc.0/gadget/lun%d/file
 RECOVERY_GRAPHICS_USE_LINELENGTH := true
 TW_THEME := portrait_hdpi
+TW_DEFAULT_LANGUAGE := ru
 TW_DEFAULT_EXTERNAL_STORAGE := true
 TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 TW_MAX_BRIGHTNESS := 255
 TW_CUSTOM_CPU_TEMP_PATH := /sys/devices/virtual/thermal/thermal_zone1/temp
-TARGET_RECOVERY_INITRC := $(LOCAL_PATH)/recovery/init.rc
-
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
@@ -95,12 +93,15 @@ BOARD_HAVE_BLUETOOTH_MTK := true
 BOARD_BLUETOOTH_DOES_NOT_USE_RFKILL := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
 
+# Sensors
+TARGET_NO_SENSOR_PERMISSION_CHECK := true
+
 # Healthd & Charging
 HEALTHD_ENABLE_TRICOLOR_LED := true
 RED_LED_PATH := /sys/class/leds/red/brightness
 GREEN_LED_PATH := /sys/class/leds/green/brightness
 BLUE_LED_PATH := /sys/class/leds/blue/brightness
-# Next line, fix charging-mod in power off. It needs to modify the init.cpp.
+# Next line, fix charging-mod on power off. It needs to modify the init.cpp.
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/class/BOOT/BOOT/boot/boot_mode
 
 # EGL settings
@@ -124,6 +125,9 @@ WIFI_DRIVER_FW_PATH_PARAM:="/dev/wmtWifi"
 WIFI_DRIVER_FW_PATH_STA:=STA
 WIFI_DRIVER_FW_PATH_AP:=AP
 WIFI_DRIVER_FW_PATH_P2P:=P2P
+
+# GPS
+TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
 
 # Disable memcpy opt (for audio libraries)
 TARGET_CPU_MEMCPY_OPT_DISABLE := true

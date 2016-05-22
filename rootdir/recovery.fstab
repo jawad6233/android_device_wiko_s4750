@@ -7,3 +7,4 @@
 /dev/block/mmcblk0p8	/emmc		vfat	defaults defaults
 /dev/block/mmcblk1	    /sdcard		vfat	defaults defaults
 /dev/block/mmcblk1p1	/sdcard		vfat	defaults defaults
+

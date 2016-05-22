@@ -55,8 +55,6 @@ service ril-daemon /system/bin/rild
 
 service ril-daemon-md2 /system/bin/rildmd2
     class core
-    socket rild1 stream 660 root radio		
-	 socket rild-debug1 stream 660 radio system
     socket rild-md2 stream 660 root radio
     socket rild2-md2 stream 660 root radio
     socket rild-debug-md2 stream 660 radio system
