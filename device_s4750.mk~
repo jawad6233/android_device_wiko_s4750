@@ -1,8 +1,8 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-$(call inherit-product-if-exists, vendor/wiko/s4750/s4750-vendor.mk)
+$(call inherit-product-if-exists, vendor/fly/IQ4511/j608_fly-vendor.mk)
 
-LOCAL_PATH := device/wiko/s4750
+LOCAL_PATH := device/fly/IQ4511
 
 PRODUCT_CHARACTERISTICS := default
 
