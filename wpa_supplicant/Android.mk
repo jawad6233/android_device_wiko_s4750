@@ -14,8 +14,11 @@
 # limitations under the License.
 #
 
+ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),mt6592)
+
 LOCAL_PATH := $(call my-dir)
 
+##### For Google SUPPLICANT
 ifeq ($(WPA_SUPPLICANT_VERSION),VER_0_8_X)
     WPA_SUPPL_DIR = external/wpa_supplicant_8
     WPA_SRC_FILE :=
@@ -66,5 +69,7 @@ LOCAL_C_INCLUDES := $(WPA_SUPPL_DIR_INCLUDE)
 include $(BUILD_STATIC_LIBRARY)
 
 ########################
+
+endif
 
 endif
