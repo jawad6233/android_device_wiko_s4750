@@ -10,10 +10,6 @@ on charger
     # disable USB
     write /sys/devices/platform/mt_usb/cmode 0
 
-on early-init
-    mount debugfs /sys/kernel/debug /sys/kernel/debug
-    setprop ro.mtk.hardware mt6592
-
 on init
     export LD_PRELOAD "/system/lib/libxlog.so /system/lib/libmt6592.so"
 
@@ -28,18 +24,11 @@ on init
     mkdir /protect_s 0771 system system
 
 	# Change ION driver permission
-    chmod 0666 /dev/ion
+    chmod 0644 /dev/ion
 
 	# change lk_env permission
     chown root system /proc/lk_env
     chmod 0660 /proc/lk_env
-
-    # GPS
-    chown gps gps /sys/class/gpsdrv/gps/pwrctl
-    chown gps gps /sys/class/gpsdrv/gps/suspend
-    chown gps gps /sys/class/gpsdrv/gps/state
-    chown gps gps /sys/class/gpsdrv/gps/pwrsave
-    chown gps gps /sys/class/gpsdrv/gps/status
 
 	# mount different fs start
 
@@ -48,54 +37,32 @@ on fs
     mount_all /fstab.mt6592
     write /proc/bootprof "INIT:eMMC:Mount_All_END"
 
-service agpsd /system/bin/mtk_agpsd
-    class main
-    socket agpsd stream 660 gps system
-    socket agpsd2 stream 660 gps system
-    socket agpsd3 stream 660 gps system
-    user root
-    group gps ccci inet sdcard_r sdcard_rw misc
-    oneshot
-
-service mnld /system/xbin/mnld
-    class main
-    user root
-    group system gps inet misc sdcard_rw sdcard_r media_rw
-    socket mnld stream 660 gps system
-    oneshot
-
-service wifi2agps /system/bin/wifi2agps
-    class main
-    user root
-    group gps inet
-    oneshot
-
-service BGW /system/xbin/BGW
-    user root
-    group gps system radio
-    class main
-    oneshot
-
 # mount different fs end
 
 on post-fs
-    exec /system/bin/mknod /dev/wmtWifi c 153 0
+    exec /system/xbin/mknod /dev/wmtWifi c 153 0
     chmod 0660 /dev/wmtWifi
     chown system system /dev/wmtWifi
 
-    exec /system/bin/mknod /dev/Vcodec c 160 0
+    exec /system/xbin/mknod /dev/Vcodec c 160 0
     chmod 0660 /dev/Vcodec
     chown system media /dev/Vcodec
 
-    exec /system/bin/mknod /dev/stpwmt c 190 0
-    exec /system/bin/mknod /dev/stpgps c 191 0
-    exec /system/bin/mknod /dev/stpbt  c 192 0
+    exec /system/xbin/mknod /dev/stpwmt c 190 0
+    exec /system/xbin/mknod /dev/stpgps c 191 0
+
+    exec /system/xbin/mknod /dev/stpbt  c 192 0
 
     # GPS
     chmod 0666 /dev/gps
     chown system gps /dev/gps
     chmod 0660 /dev/stpgps
     chown gps gps /dev/stpgps
+
+    # FM Radio device node
+    exec /system/xbin/mknod /dev/fm c 193 0
+    chmod 0777 /dev/fm
+    chown system media /dev/fm
 
     chmod 0660 /dev/stpbt
     chown bluetooth radio /dev/stpbt
@@ -200,15 +167,16 @@ on post-fs-data
     # create for muxd pts device node , to operate without root
     mkdir /dev/radio 0770 radio radio
 
-    start adbd
+#    start adbd
 
     # GPS
-    mkdir /data/agps_supl 0771 gps system
     mkdir /data/gps_mnl 0771 gps system
 
-    mkdir /data/misc/gps 0770 gps gps
+    mkdir /data/misc/gps 0770 gps system
+
 # -----------------------
 # Add by MTK
+# -----------------------
 
     # dhcp server
     mkdir /data/misc/dhcp 0770 dhcp wifi
@@ -458,7 +426,7 @@ on post-fs-data
     chmod 0664 /dev/hdmitx
 
     # JPEG
-    chmod 0440 /dev/mtk_jpeg
+    chmod 0444 /dev/mtk_jpeg
     chown system camera /dev/mtk_jpeg
 
     #ALMK
@@ -469,7 +437,7 @@ on post-fs-data
 
     #Camera
     chmod 0660 /dev/camera-sysram
-    chmod 0660 /dev/camera-isp
+    chmod 0664 /dev/camera-isp
     chmod 0660 /dev/camera-pipemgr
     chmod 0660 /dev/kd_camera_hw
     chmod 0660 /dev/kd_camera_flashlight
@@ -543,11 +511,22 @@ on post-fs-data
     chmod 0660 /dev/ttyMT2
     chown system system /dev/ttyMT2
 
+# GPS
+    chown gps gps /sys/class/gpsdrv/gps/pwrctl
+    chown gps gps /sys/class/gpsdrv/gps/suspend
+    chown gps gps /sys/class/gpsdrv/gps/state
+    chown gps gps /sys/class/gpsdrv/gps/pwrsave
+    chown gps gps /sys/class/gpsdrv/gps/status
 
 #
 # Connectivity related device nodes & configuration (end)
 #
 
+# AGPS
+    mkdir /data/agps_supl 0771 gps system
+
+# GPS
+    mkdir /data/gps_mnl 0771 gps system
 
 # Encrypt phone function
     setprop vold.post_fs_data_done 1
@@ -583,6 +562,7 @@ on boot
 
     chown root   system /sys/kernel/debug/binder/transaction_log_enable
 
+    # leds
     chown root   radio  /sys/class/leds/lcd-backlight/duty
     chown root   radio  /sys/class/leds/lcd-backlight/div
     chown system system /sys/class/leds/lcd-backlight/trigger
@@ -592,18 +572,17 @@ on boot
     chown system system /sys/class/leds/red/trigger
     chown system system /sys/class/leds/green/trigger
     chown system system /sys/class/leds/blue/trigger
+    chown system system /sys/class/leds/red/on_off_ms
+    chown system system /sys/class/leds/green/on_off_ms
+    chown system system /sys/class/leds/blue/on_off_ms
+    chown system system /sys/class/leds/red/rgb_start
 
     # Permission for hibernation
     chown radio system /sys/power/tuxonice
     chown radio system /sys/power/tuxonice/do_hibernate
     chmod 0770 /sys/power/tuxonice
-    chmod 0220 /sys/power/tuxonice/do_hibernate	
-	
-    # FM Radio device node
-    exec /system/bin/mknod /dev/fm c 193 0
-    chmod 0777 /dev/fm
-    chown system media /dev/fm
-	
+    chmod 0220 /sys/power/tuxonice/do_hibernate
+
 ## Thermal
   #change permissions on thermal devices
   chown root system /proc/mtktscpu/mtktscpu
@@ -840,7 +819,35 @@ service bluetoothd /system/bin/bluetoothd -n
 #
 #  External Modme control related services
 #
-    
+
+service agpsd /system/bin/mtk_agpsd
+    class main
+    socket agpsd stream 660 gps system
+    socket agpsd2 stream 660 gps system
+    socket agpsd3 stream 660 gps system
+    user root
+    group gps ccci inet sdcard_r sdcard_rw misc
+    oneshot
+
+service mnld /system/xbin/mnld
+    class main
+    user root
+    group system gps inet misc sdcard_rw sdcard_r media_rw
+    socket mnld stream 660 gps system
+    oneshot
+
+service wifi2agps /system/bin/wifi2agps
+    class main
+    user root
+    group gps inet
+    oneshot
+
+service BGW /system/xbin/BGW
+    user root
+    group gps system radio
+    class main
+    oneshot
+
 service mdlogger /system/bin/mdlogger
     class main
     user shell
