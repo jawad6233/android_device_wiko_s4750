@@ -151,6 +151,15 @@ PRODUCT_PACKAGES += \
     wpa_supplicant \
     wpa_supplicant.conf
 
+# NFC
+PRODUCT_PACKAGES += \
+    com.android.nfc_extras \
+    nfcstackp \
+    libmtknfc_dynamic_load_jni \
+    libnfc_mt6605_jni \
+    Nfc \
+    Tag
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/hostapd/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf \
     $(LOCAL_PATH)/configs/hostapd/hostapd.accept:system/etc/hostapd/hostapd.accept \
