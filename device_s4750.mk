@@ -74,7 +74,7 @@ PRODUCT_COPY_FILES += \
 # Bluetooth
 PRODUCT_PACKAGES += \
     libbt-vendor
-    
+
 # Keylayout
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/mtk-kpd.kl:system/usr/keylayout/mtk-kpd.kl \
@@ -174,26 +174,17 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
 	$(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
 
-# USB
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
+PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
 PRODUCT_PROPERTY_OVERRIDES := \
-	persist.sys.timezone=Europe/Moscow \
-	persist.sys.language=ru \
-	persist.sys.country=RU \
-	ro.telephony.sim.count=2 \
-	ro.allow.mock.location=0 \
-	ro.debuggable=1 \
-	persist.sys.usb.config=mtp,adb \
-	persist.service.adb.enable=1 \
-	persist.service.debuggable=1 \
-	persist.mtk.wcn.combo.chipid=-1
+    ro.mediatek.platform=mt6592 \
+    persist.mtk.wcn.combo.chipid=-1
 
 # AAPT
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
+# USB
 PRODUCT_PACKAGES += \
     librs_jni \
     com.android.future.usb.accessory
