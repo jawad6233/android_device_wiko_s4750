@@ -3,7 +3,10 @@
 
 LOCAL_PATH := device/wiko/s4750
 
-# board
+# Headers
+TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
+
+# Board
 TARGET_BOARD_PLATFORM := mt6592
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
@@ -137,7 +140,12 @@ WIFI_DRIVER_FW_PATH_AP:=AP
 WIFI_DRIVER_FW_PATH_P2P:=P2P
 
 # GPS
-TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
+BOARD_GPS_LIBRARIES := true
+BOARD_MEDIATEK_USES_GPS := true
+
+# FMRadio
+MTK_FM_SUPPORT := yes
+MTK_FM_RX_SUPPORT := yes
 
 # Disable memcpy opt (for audio libraries)
 TARGET_CPU_MEMCPY_OPT_DISABLE := true

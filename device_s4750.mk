@@ -1,6 +1,28 @@
+#
+# Copyright (C) 2016 The CyanogenMod Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Inherit from the common Open Source product configuration
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
+# Inherit vendor blobs
 $(call inherit-product-if-exists, vendor/wiko/s4750/s4750-vendor.mk)
+
+# The gps config appropriate for this device
+$(call inherit-product, device/common/gps/gps_eu_supl.mk)
 
 LOCAL_PATH := device/wiko/s4750
 
@@ -18,7 +40,6 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 
 PRODUCT_PACKAGES += \
 	Torch \
-	FMRadio \
 	Snap
 
 PRODUCT_PACKAGES += \
@@ -70,7 +91,10 @@ PRODUCT_PACKAGES += \
     gsm0710muxdmd2
 
 # GPS
-$(call inherit-product, device/common/gps/gps_us_supl.mk)
+PRODUCT_PACKAGES += \
+    gps.mt6592 \
+    YGPS
+
 PRODUCT_COPY_FILES += \
      $(LOCAL_PATH)/configs/agps_profiles_conf2.xml:system/etc/agps_profiles_conf2.xml
 
@@ -139,14 +163,10 @@ PRODUCT_PACKAGES += \
     libtinyxml
 
 # FMRadio
-# PRODUCT_PACKAGES += \
+PRODUCT_PACKAGES += \
     FMRadio \
     libfmcust \
     libfmjni \
-    libfmmt6620 \
-    libfmmt6627 \
-    libfmmt6628 \
-    libfmmt6630 \
     libmtkplayer
 
 PRODUCT_COPY_FILES += \
