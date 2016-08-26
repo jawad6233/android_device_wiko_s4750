@@ -49,14 +49,15 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf
-    
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     libbt-vendor
     
 # Keylayout
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/mtk-kpd.kl:system/usr/keylayout/mtk-kpd.kl
+    $(LOCAL_PATH)/configs/mtk-kpd.kl:system/usr/keylayout/mtk-kpd.kl \
+    $(LOCAL_PATH)/configs/mtk-tpd.kl:system/usr/keylayout/mtk-tpd.kl
 
 # GSM
 PRODUCT_PACKAGES += libmt6592
